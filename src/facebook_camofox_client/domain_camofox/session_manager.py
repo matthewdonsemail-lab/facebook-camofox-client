@@ -1,30 +1,11 @@
+"""Account-scoped Camofox runtime lifecycle."""
 from __future__ import annotations
 
-import uuid
 from pathlib import Path
 from typing import Any
 
-
-class CamofoxSession:
-    def __init__(self, account_id: str, runtime: Any, browser: Any, context: Any) -> None:
-        self.account_id = account_id
-        self.session_id = str(uuid.uuid4())
-        self.runtime = runtime
-        self.browser = browser
-        self.context = context
-        self._closed = False
-
-    async def open_surface(self, surface: str, target: dict[str, Any]):
-        if surface != "facebook_group":
-            raise ValueError(f"unsupported surface: {surface}")
-
-        url = target.get("url") or f"https://facebook.com/groups/{target['group_id']}"
-        page = await self.context.new_page()
-        await page.goto(url, wait_until="domcontentloaded")
-        return page
-
-    async def execute(self, activity: str, params: dict[str, Any]) -> dict[str, Any]:
-        return {"activity": activity, "params": params, "results": []}
+from .constants import CAMOFOX_GEOIP, CAMOFOX_HUMANIZE
+from .session import CamofoxSession
 
 
 class CamofoxSessionManager:
@@ -37,16 +18,14 @@ class CamofoxSessionManager:
         from camoufox.async_api import AsyncCamoufox
 
         runtime = AsyncCamoufox(
-            humanize=True,
-            geoip=True,
+            humanize=CAMOFOX_HUMANIZE,
+            geoip=CAMOFOX_GEOIP,
             proxy=proxy_config,
         )
         browser = await runtime.__aenter__()
-
         context_kwargs: dict[str, Any] = {}
         if storage_state_path:
             context_kwargs["storage_state"] = str(Path(storage_state_path))
-
         context = await browser.new_context(**context_kwargs)
         return CamofoxSession(account_id, runtime, browser, context)
 
