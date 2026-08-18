@@ -3,7 +3,6 @@ from __future__ import annotations
 
 from typing import Any
 
-from facebook_camofox_client.domain_camofox.interactions import CamofoxInteractions
 from facebook_camofox_client.domain_camofox.selectors import MESSAGE_THREAD_LINKS
 from .schemas import Thread
 
