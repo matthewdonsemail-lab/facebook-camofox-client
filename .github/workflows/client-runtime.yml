@@ -1,0 +1,35 @@
+name: Client Runtime
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  runtime:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      FACEBOOK_ACCOUNT_ID: ${{ secrets.FACEBOOK_ACCOUNT_ID }}
+      FACEBOOK_EMAIL: ${{ secrets.FACEBOOK_EMAIL }}
+      FACEBOOK_PASSWORD: ${{ secrets.FACEBOOK_PASSWORD }}
+      FACEBOOK_TOTP_SECRET: ${{ secrets.FACEBOOK_TOTP_SECRET }}
+      FACEBOOK_PROXY_SERVER: ${{ secrets.FACEBOOK_PROXY_SERVER }}
+      FACEBOOK_PROXY_USERNAME: ${{ secrets.FACEBOOK_PROXY_USERNAME }}
+      FACEBOOK_PROXY_PASSWORD: ${{ secrets.FACEBOOK_PROXY_PASSWORD }}
+      FACEBOOK_STORAGE_STATE_PATH: ${{ secrets.FACEBOOK_STORAGE_STATE_PATH }}
+      FACEBOOK_RUNTIME_ENABLED: ${{ secrets.FACEBOOK_RUNTIME_ENABLED }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install client
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e '.[dev]' python-dotenv
+      - name: Run production runtime primitives
+        run: python -m pytest -q tests/runtime --log-cli-level=INFO
