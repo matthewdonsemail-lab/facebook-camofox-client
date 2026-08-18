@@ -1,6 +1,6 @@
 # Facebook action parity
 
-This client ports the proven Facebook behaviors from `Listaro_backup` into the existing Camofox-native domain architecture.
+This client ports the proven Facebook behaviors - Camofox-native domain architecture.
 
 ## Architecture
 
@@ -63,8 +63,6 @@ src/facebook_camofox_client/
 ```
 
 ## Source parity
-
-The source behavioral reference is `Listaro_backup`:
 
 - `agent/src/adspower.ts` — account/browser profile lifecycle.
 - `agent/src/login-accounts.ts` — Facebook login, OTP challenge detection and submission.
