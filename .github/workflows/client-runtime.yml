@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
+      FACEBOOK_RUNTIME_ENABLED: ${{ secrets.FACEBOOK_RUNTIME_ENABLED }}
       FACEBOOK_ACCOUNT_ID: ${{ secrets.FACEBOOK_ACCOUNT_ID }}
       FACEBOOK_EMAIL: ${{ secrets.FACEBOOK_EMAIL }}
       FACEBOOK_PASSWORD: ${{ secrets.FACEBOOK_PASSWORD }}
@@ -19,7 +20,15 @@ jobs:
       FACEBOOK_PROXY_USERNAME: ${{ secrets.FACEBOOK_PROXY_USERNAME }}
       FACEBOOK_PROXY_PASSWORD: ${{ secrets.FACEBOOK_PROXY_PASSWORD }}
       FACEBOOK_STORAGE_STATE_PATH: ${{ secrets.FACEBOOK_STORAGE_STATE_PATH }}
-      FACEBOOK_RUNTIME_ENABLED: ${{ secrets.FACEBOOK_RUNTIME_ENABLED }}
+      FACEBOOK_RUNTIME_THREAD_ID: ${{ secrets.FACEBOOK_RUNTIME_THREAD_ID }}
+      FACEBOOK_RUNTIME_THREAD_NAME: ${{ secrets.FACEBOOK_RUNTIME_THREAD_NAME }}
+      FACEBOOK_RUNTIME_MESSAGE: ${{ secrets.FACEBOOK_RUNTIME_MESSAGE }}
+      FACEBOOK_RUNTIME_MARKETPLACE_TITLE: ${{ secrets.FACEBOOK_RUNTIME_MARKETPLACE_TITLE }}
+      FACEBOOK_RUNTIME_MARKETPLACE_PRICE: ${{ secrets.FACEBOOK_RUNTIME_MARKETPLACE_PRICE }}
+      FACEBOOK_RUNTIME_MARKETPLACE_IMAGES: ${{ secrets.FACEBOOK_RUNTIME_MARKETPLACE_IMAGES }}
+      FACEBOOK_RUNTIME_MARKETPLACE_CATEGORY: ${{ secrets.FACEBOOK_RUNTIME_MARKETPLACE_CATEGORY }}
+      FACEBOOK_RUNTIME_MARKETPLACE_CONDITION: ${{ secrets.FACEBOOK_RUNTIME_MARKETPLACE_CONDITION }}
+      FACEBOOK_RUNTIME_MARKETPLACE_DESCRIPTION: ${{ secrets.FACEBOOK_RUNTIME_MARKETPLACE_DESCRIPTION }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -30,6 +39,6 @@ jobs:
       - name: Install client
         run: |
           python -m pip install --upgrade pip
-          pip install -e '.[dev]' python-dotenv
+          pip install -e '.[dev]'
       - name: Run production runtime primitives
         run: python -m pytest -q tests/runtime --log-cli-level=INFO
